@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AllParticles — Explorer</title>
+  <link rel="icon" type="image/png" href="files/imgs/atom.png" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --panel: rgba(255,255,255,.88);
+      --ink: #0f172a; /* slate-900 */
+      --muted: #475569; /* slate-600 */
+      --focus: #2563eb; /* indigo-600 */
+      --accent: #16a34a; /* green-600 */
+      --radius: 16px;
+      --shadow: 0 12px 40px rgba(2,6,23,.18);
+      --grid-gap: .4rem;
+      --cell: 38px; /* base periodic cell size, scales responsively */
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background: url('files/imgs/backgr.png') center/cover no-repeat fixed, #0b1022;
+      /* fallback tint */
+    }
+    .scrim{ position:fixed; inset:0; backdrop-filter: blur(8px); background: rgba(255,255,255,.22); }
+
+    .app{ position:relative; width:min(1200px,96vw); margin:4vh auto 5vh; display:grid; gap: .8rem;
+      grid-template-rows: auto minmax(320px, 1fr);
+      grid-template-columns: 1fr 320px;
+      grid-template-areas:
+        "info glossary"
+        "workspace glossary";
+    }
+
+    /* Top info pane */
+    .pane{ background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden }
+    .info{ grid-area: info; display:grid; grid-template-columns: 1fr auto; align-items:center; }
+    .info header{ padding: .85rem 1rem; border-bottom: 1px solid rgba(2,6,23,.08); display:flex; gap:.65rem; align-items:center }
+    .info header h1{ margin:0; font-size: clamp(1.1rem, 3.2vw, 1.6rem) }
+    .badge{ font-size: 12px; padding:.25rem .55rem; border-radius:999px; background:rgba(2,6,23,.06) }
+    .meta{ display:flex; gap:.5rem; color:var(--muted) }
+    .quick-stats{ display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:.75rem; padding: .75rem 1rem 1rem }
+    .stat{ background:#fff; border:1px solid rgba(2,6,23,.06); border-radius:12px; padding:.6rem .7rem }
+    .stat .k{ font-size:12px; color:var(--muted) }
+    .stat .v{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight:600 }
+
+    /* Workspace: tabbed area (Periodic Map | Pie Chart) */
+    .workspace{ grid-area: workspace; display:grid; grid-template-rows: auto 1fr; }
+    .tabs{ display:flex; gap:.5rem; padding:.55rem .6rem; border-bottom:1px solid rgba(2,6,23,.08); background:linear-gradient(#ffffff, #fafafa) }
+    .tab{ border:0; background:#fff; border:1px solid rgba(2,6,23,.1); padding:.45rem .8rem; border-radius:10px; cursor:pointer; font-weight:600 }
+    .tab[aria-selected="true"]{ outline:2px solid var(--focus); outline-offset:1px }
+    .workspace-body{ position:relative; padding:.6rem; }
+
+    /* Periodic map */
+    .ptable{ display:grid; grid-template-columns: repeat(18, minmax(20px, 1fr)); gap: var(--grid-gap); align-content:start }
+    .cell{ position:relative; min-height: var(--cell); border-radius:10px; background:#fff; border:1px solid rgba(2,6,23,.08); cursor:pointer; box-shadow: inset 0 1px 0 rgba(2,6,23,.04) }
+    .cell .sym{ position:absolute; left:.35rem; top:.25rem; font-weight:700 }
+    .cell .num{ position:absolute; right:.35rem; top:.25rem; font-size:11px; color:var(--muted) }
+    .cell .name{ position:absolute; left:.35rem; bottom:.3rem; font-size:11px; color:var(--muted); max-width: calc(var(--cell)*2) }
+    .cat-metal{ background: #eef8ff }
+    .cat-nonmetal{ background: #f1fff1 }
+    .cat-metalloid{ background: #fff7ed }
+
+    /* Pie chart container */
+    .chart-wrap{ height:100%; display:grid; place-items:center }
+    .chart-card{ width:min(560px, 100%); background:#fff; border-radius:12px; border:1px solid rgba(2,6,23,.08); padding:1rem }
+
+    /* Glossary pane */
+    .glossary{ grid-area: glossary; display:grid; grid-template-rows: auto 1fr; }
+    .glossary header{ padding:.75rem 1rem; border-bottom:1px solid rgba(2,6,23,.08); display:flex; align-items:center; justify-content:space-between }
+    .glossary header input{ width: 62%; padding:.5rem .65rem; border:1px solid rgba(2,6,23,.2); border-radius:10px }
+    .glossary .list{ overflow:auto; padding:.75rem 1rem; display:grid; gap:.6rem; background: #fbfbfb }
+    .term{ background:#fff; border:1px solid rgba(2,6,23,.08); border-radius:10px; padding:.55rem .65rem }
+    .term .t{ font-weight:700 }
+    .term .u{ font-size:12px; color:var(--muted) }
+
+    /* Responsive tweaks */
+    @media (max-width: 980px){
+      .app{
+        grid-template-columns: 1fr; grid-template-areas:
+        "info"
+        "workspace"
+        "glossary";
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scrim" aria-hidden="true"></div>
+  <main class="app" role="application" aria-label="AllParticles explorer">
+    <!-- Top info pane -->
+    <section class="pane info" id="info">
+      <header>
+        <h1 id="elTitle">Pick an element</h1>
+        <div class="meta">
+          <span class="badge" id="elCategory">—</span>
+          <span class="badge" id="elPhase">—</span>
+        </div>
+      </header>
+      <div class="quick-stats" aria-live="polite">
+        <div class="stat"><div class="k">Atomic #</div><div class="v" id="elZ">—</div></div>
+        <div class="stat"><div class="k">Symbol</div><div class="v" id="elSym">—</div></div>
+        <div class="stat"><div class="k">Atomic Mass (u)</div><div class="v" id="elMass">—</div></div>
+        <div class="stat"><div class="k">Boiling °K</div><div class="v" id="elBoil">—</div></div>
+      </div>
+    </section>
+
+    <!-- Workspace: tabs -->
+    <section class="pane workspace" id="workspace">
+      <div class="tabs" role="tablist" aria-label="View switcher">
+        <button class="tab" role="tab" aria-selected="true" id="tab-map">Periodic Map</button>
+        <button class="tab" role="tab" aria-selected="false" id="tab-chart">Pie Chart</button>
+      </div>
+      <div class="workspace-body">
+        <!-- Periodic table view -->
+        <div id="view-map" role="tabpanel" aria-labelledby="tab-map">
+          <div class="ptable" id="ptable" aria-label="Periodic table grid"></div>
+        </div>
+        <!-- Chart view -->
+        <div id="view-chart" role="tabpanel" aria-labelledby="tab-chart" hidden>
+          <div class="chart-wrap">
+            <div class="chart-card">
+              <h3 style="margin:.3rem 0 .6rem">Elements by Category</h3>
+              <canvas id="pie"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Glossary -->
+    <aside class="pane glossary" id="glossary">
+      <header>
+        <h2 style="margin:0; font-size:1rem">Terms & Units</h2>
+        <input id="glossarySearch" type="search" placeholder="Search…" aria-label="Search glossary" />
+      </header>
+      <div class="list" id="glossaryList" aria-live="polite"></div>
+    </aside>
+  </main>
+
+  <!-- Data: prefer external JSON; fall back to minimal inline sample so this file runs standalone. -->
+  <script type="application/json" id="elements-fallback">
+  {
+    "elements": [
+      {"number":1, "symbol":"H",  "name":"Hydrogen",  "category":"nonmetal",  "xpos":1, "ypos":1, "phase":"gas", "atomic_mass":1.008, "boil":20.28},
+      {"number":2, "symbol":"He", "name":"Helium",    "category":"nonmetal",  "xpos":18,"ypos":1, "phase":"gas", "atomic_mass":4.0026, "boil":4.22},
+      {"number":3, "symbol":"Li", "name":"Lithium",   "category":"metal",     "xpos":1, "ypos":2, "phase":"solid","atomic_mass":6.94, "boil":1603},
+      {"number":4, "symbol":"Be", "name":"Beryllium", "category":"metal",     "xpos":2, "ypos":2, "phase":"solid","atomic_mass":9.0122, "boil":2744},
+      {"number":5, "symbol":"B",  "name":"Boron",     "category":"metalloid", "xpos":13,"ypos":2, "phase":"solid","atomic_mass":10.81, "boil":4200},
+      {"number":6, "symbol":"C",  "name":"Carbon",    "category":"nonmetal",  "xpos":14,"ypos":2, "phase":"solid","atomic_mass":12.011, "boil":4300},
+      {"number":7, "symbol":"N",  "name":"Nitrogen",  "category":"nonmetal",  "xpos":15,"ypos":2, "phase":"gas",  "atomic_mass":14.007, "boil":77.36},
+      {"number":8, "symbol":"O",  "name":"Oxygen",    "category":"nonmetal",  "xpos":16,"ypos":2, "phase":"gas",  "atomic_mass":15.999, "boil":90.20},
+      {"number":9, "symbol":"F",  "name":"Fluorine",  "category":"nonmetal",  "xpos":17,"ypos":2, "phase":"gas",  "atomic_mass":18.998, "boil":85.03},
+      {"number":10,"symbol":"Ne", "name":"Neon",      "category":"nonmetal",  "xpos":18,"ypos":2, "phase":"gas",  "atomic_mass":20.180, "boil":27.07}
+    ]
+  }
+  </script>
+
+  <script type="application/json" id="glossary-fallback">
+  {
+    "terms": [
+      {"term":"Atomic number (Z)", "unit":"—", "definition":"Number of protons in the nucleus."},
+      {"term":"Atomic mass", "unit":"u", "definition":"Weighted average mass of isotopes."},
+      {"term":"Boiling point", "unit":"K", "definition":"Temperature at which a substance boils under standard pressure."}
+    ]
+  }
+  </script>
+
+  <script>
+    // --- helpers
+    const $ = (id) => document.getElementById(id);
+    const elTitle = $("elTitle"), elCategory=$("elCategory"), elPhase=$("elPhase"), elZ=$("elZ"), elSym=$("elSym"), elMass=$("elMass"), elBoil=$("elBoil");
+    const ptable = $("ptable");
+    const viewMap = $("view-map"), viewChart=$("view-chart");
+    const tabMap = $("tab-map"), tabChart=$("tab-chart");
+    const glossSearch = $("glossarySearch"), glossList=$("glossaryList");
+
+    let ELEMENTS = [];
+    let TERMS = [];
+    let pieChart;
+
+    function catClass(cat){
+      if(!cat) return '';
+      if(cat.includes('metalloid')) return 'cat-metalloid';
+      if(cat.includes('nonmetal')) return 'cat-nonmetal';
+      return 'cat-metal';
+    }
+
+    function selectElement(e){
+      elTitle.textContent = `${e.name} (${e.symbol})`;
+      elCategory.textContent = e.category || '—';
+      elPhase.textContent = e.phase || '—';
+      elZ.textContent = e.number ?? '—';
+      elSym.textContent = e.symbol ?? '—';
+      elMass.textContent = (e.atomic_mass ?? '—');
+      elBoil.textContent = (e.boil ?? '—');
+    }
+
+    function buildTable(){
+      ptable.innerHTML = '';
+      // place cells into 7x18 grid (lanthanides/actinides can be appended later if present)
+      // Using xpos (1..18), ypos (1..7)
+      ELEMENTS.forEach(e => {
+        const cell = document.createElement('button');
+        cell.className = `cell ${catClass(e.category)}`;
+        cell.style.gridColumn = e.xpos;
+        cell.style.gridRow = e.ypos;
+        cell.setAttribute('title', `${e.name} (${e.symbol})`);
+        cell.innerHTML = `<div class="num">${e.number}</div><div class="sym">${e.symbol}</div><div class="name">${e.name}</div>`;
+        cell.addEventListener('click', () => selectElement(e));
+        ptable.appendChild(cell);
+      });
+    }
+
+    function buildPie(){
+      const ctx = document.getElementById('pie');
+      const counts = ELEMENTS.reduce((acc, e)=>{ const k=(e.category||'other').replace(/ .*$/,''); acc[k]=(acc[k]||0)+1; return acc; },{});
+      const labels = Object.keys(counts);
+      const data = Object.values(counts);
+      if(pieChart) pieChart.destroy();
+      pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: { labels, datasets: [{ data }] },
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    function filterGlossary(){
+      const q = glossSearch.value.trim().toLowerCase();
+      renderGlossary(q);
+    }
+
+    function renderGlossary(q=''){
+      glossList.innerHTML='';
+      TERMS.filter(t => !q || t.term.toLowerCase().includes(q) || (t.unit||'').toLowerCase().includes(q) )
+        .forEach(t => {
+          const card = document.createElement('div');
+          card.className = 'term';
+          card.innerHTML = `<div class="t">${t.term}</div><div class="u">${t.unit||''}</div><div class="d">${t.definition||''}</div>`;
+          glossList.appendChild(card);
+        });
+    }
+
+    function switchTo(view){
+      const showChart = (view === 'chart');
+      viewChart.hidden = !showChart;
+      viewMap.hidden = showChart;
+      tabChart.setAttribute('aria-selected', showChart);
+      tabMap.setAttribute('aria-selected', !showChart);
+      if(showChart) buildPie();
+    }
+
+    tabMap.addEventListener('click', () => switchTo('map'));
+    tabChart.addEventListener('click', () => switchTo('chart'));
+    glossSearch.addEventListener('input', filterGlossary);
+
+    async function loadJSON(url, fallbackId){
+      try{
+        const r = await fetch(url);
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return await r.json();
+      }catch(e){
+        const txt = document.getElementById(fallbackId).textContent;
+        return JSON.parse(txt);
+      }
+    }
+
+    (async function init(){
+      const elData = await loadJSON('files/elements.json', 'elements-fallback');
+      const glData = await loadJSON('files/glossary.json', 'glossary-fallback');
+      ELEMENTS = elData.elements || elData || [];
+      TERMS = glData.terms || glData || [];
+      buildTable();
+      renderGlossary();
+      // Preselect Hydrogen if present
+      const H = ELEMENTS.find(e => e.symbol === 'H') || ELEMENTS[0];
+      if(H) selectElement(H);
+    })();
+  </script>
+</body>
+</html>

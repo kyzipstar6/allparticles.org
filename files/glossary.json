@@ -1,0 +1,124 @@
+{
+  "terms": [
+    {
+      "term": "Atomic number (Z)",
+      "unit": "—",
+      "definition": "Count of protons in the nucleus. Defines the element."
+    },
+    {
+      "term": "Mass number (A)",
+      "unit": "—",
+      "definition": "Total number of protons and neutrons in a specific nuclide."
+    },
+    {
+      "term": "Atomic mass",
+      "unit": "u",
+      "definition": "Weighted average of isotopic masses for a natural sample."
+    },
+    {
+      "term": "Mole",
+      "unit": "mol",
+      "definition": "Amount containing 6.02214076×10^23 specified entities."
+    },
+    {
+      "term": "Avogadro constant",
+      "unit": "mol^-1",
+      "definition": "6.02214076×10^23 per mole."
+    },
+    {
+      "term": "Boiling point",
+      "unit": "K",
+      "definition": "Temperature at which vapor pressure equals ambient pressure."
+    },
+    {
+      "term": "Melting point",
+      "unit": "K",
+      "definition": "Temperature at which solid and liquid phases coexist at 1 atm."
+    },
+    {
+      "term": "Electronegativity (Pauling)",
+      "unit": "—",
+      "definition": "Relative tendency of an atom to attract bonding electrons."
+    },
+    {
+      "term": "Electron affinity",
+      "unit": "kJ·mol^-1",
+      "definition": "Energy change when an atom gains an electron to form an anion."
+    },
+    {
+      "term": "First ionization energy",
+      "unit": "kJ·mol^-1",
+      "definition": "Energy required to remove the outermost electron from a gas-phase atom."
+    },
+    {
+      "term": "Atomic radius (covalent)",
+      "unit": "pm",
+      "definition": "Half the distance between nuclei of two bonded identical atoms."
+    },
+    {
+      "term": "Density",
+      "unit": "g·cm^-3",
+      "definition": "Mass per unit volume at specified conditions."
+    },
+    {
+      "term": "Standard pressure",
+      "unit": "Pa",
+      "definition": "100,000 pascals (IUPAC standard state)."
+    },
+    {
+      "term": "Standard temperature",
+      "unit": "K",
+      "definition": "273.15 K (0 °C)."
+    },
+    {
+      "term": "Period",
+      "unit": "—",
+      "definition": "Horizontal row in the periodic table."
+    },
+    {
+      "term": "Group",
+      "unit": "—",
+      "definition": "Vertical column in the periodic table."
+    },
+    {
+      "term": "Transition metal",
+      "unit": "—",
+      "definition": "d-block elements, typically with partially filled d subshells."
+    },
+    {
+      "term": "Post-transition metal",
+      "unit": "—",
+      "definition": "p-block metals with relatively high electronegativity and low melting points."
+    },
+    {
+      "term": "Metalloid",
+      "unit": "—",
+      "definition": "Elements with properties intermediate between metals and nonmetals."
+    },
+    {
+      "term": "Halogen",
+      "unit": "—",
+      "definition": "Group 17 reactive nonmetals."
+    },
+    {
+      "term": "Noble gas",
+      "unit": "—",
+      "definition": "Group 18 largely inert gases at STP."
+    },
+    {
+      "term": "Lanthanide",
+      "unit": "—",
+      "definition": "Elements 57–71, f-block rare earths."
+    },
+    {
+      "term": "Actinide",
+      "unit": "—",
+      "definition": "Elements 89–103, f-block, many radioactive."
+    },
+    {
+      "term": "Relative abundance (Earth crust)",
+      "unit": "ppm",
+      "definition": "Parts per million by mass of an element in the crust."
+    }
+  ]
+}
