@@ -1394,6 +1394,10 @@
       "atomic_radius":"140 pm",
       "van_der_waals_radius":"198 pm",
       "speed_of_sound":"2610 m/s ",
+      "critical_point":"819 K",
+      "critical_point_pressure":"11.7 MPa",
+      "triple_point":"386.7 K",
+      "triple_point_pressure":"12.1 kPa",
       "heat_of_fusion": "15.52 kJ/mol",
       "heat_of_vaporization": "41.17 kJ/moltcap",
       "notes": "Semi-lustrous, non-metallic solid that melts to form a deep violet liquid, and boils to a violet gas. "
@@ -1418,6 +1422,10 @@
       "speed_of_sound":"1090 m/s ",
       "heat_of_fusion": "2.27 kJ/mol",
       "heat_of_vaporization": "12.64 kJ/mol",
+      "critical_point":"289.73 K",
+      "critical_point_pressure":"5.84 MPa",
+      "triple_point":"161.4 K",
+      "triple_point_pressure":"81.77 kPa",
       "notes": "Naturally occurring xenon consists of seven stable isotopes and two long-lived radioactive isotopes."
     },
     {
@@ -1436,6 +1444,8 @@
       "density (T= 293 K)": "1.886 g/cm3",
       "electron_configuration":"[Xe] 6s1",
       "electrons_per_shield":"2, 8, 18, 18, 8, 1",
+      "critical_point":"1938 K",
+      "critical_point_pressure":"9.4 MPa",
       "atomic_radius":"265 pm",
       "van_der_waals_radius":"343 pm",
       "mohs_hardness":"0.2",
