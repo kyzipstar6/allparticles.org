@@ -10,6 +10,9 @@
       "unit": "—",
       "definition": "Total number of protons and neutrons in a specific nuclide."
     },
+    {"term": "Fermion",
+      "definition": "In particle physics, a subatomic particle that follows Fermi–Dirac statistics. Fermions have a half-integer spin (spin ⁠1/2⁠, spin ⁠3/2⁠, etc.) and obey the Pauli exclusion principle. "
+    },
     {
       "term": "Atomic mass",
       "unit": "u",
@@ -19,6 +22,18 @@
       "term": "Mole",
       "unit": "mol",
       "definition": "Amount containing 6.02214076×10^23 specified entities."
+    },
+    {
+      "term": "Fermion",
+      "types": "Quark generations I, II and III.",
+      "definition": "In general, that class of particles that use to be positive or neutrally charged. t"
+      
+    },
+    {
+      "term": "Lepton",
+      "types": "Lepton generations I, II and III.",
+      "definition": "In general, that class of particles that use to be negative or neutrally charged. "
+      
     },
     {
       "term": "Avogadro constant",
@@ -31,6 +46,11 @@
       "definition": "Temperature at which vapor pressure equals ambient pressure."
     },
     {
+      "term": "Gluon",
+      "unit": "-",
+      "definition": "Ttype of massless elementary particle that mediates the strong interaction between quarks, acting as the exchange particle for the interaction."
+    },
+    {
       "term": "Melting point",
       "unit": "K",
       "definition": "Temperature at which solid and liquid phases coexist at 1 atm."
@@ -40,6 +60,23 @@
       "unit": "—",
       "definition": "Relative tendency of an atom to attract bonding electrons."
     },
+    {
+      "term": "d-block metals",
+      "definition": "Elements in the middle of the table, groups from 3-12. Mostly transition metals. The d-block elements are all metals and most have one or more chemically active d-orbital electrons.",
+      "azimuthal quantum number": "2"
+    },
+    {
+      "term": "f-block metals",
+      "definition": "Known as well as the fundamental metals. These elements are generally not considered part of any group. They come in two series: lanthanum through ytterbium in period 6, and actinium through nobelium in period 7. ",
+      "azimuthal quantum number": "3"
+    
+    },
+     {
+      "term": "g-block metals",
+      "definition": "First elements predicted to begin by the atomic number 121. They are likely already low enough in energy to start participating chemically in element 121. The the g-block would have eighteen elements. ",
+      "azimuthal quantum number": "4"
+    },
+  
     {
       "term": "Electron affinity",
       "unit": "kJ·mol^-1",

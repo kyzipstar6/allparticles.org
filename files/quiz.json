@@ -1,0 +1,101 @@
+[
+    {
+        "difficulty": "medium",
+        "question": "One of these sub atomic particle does follow Fermi-Dirac statistics:",
+        "options": [
+            "Gluon",
+            "Lepton",
+            "Fermion",
+            "Proton"
+        ],
+        "correctAnswer": "Fermion"
+    },
+    {
+        "difficulty": "medium",
+        "question": "One of these sub atomic particle does follow Fermi-Dirac statistics:",
+        "options": [
+            "Gluon",
+            "Lepton",
+            "Fermion",
+            "Proton"
+        ],
+        "correctAnswer": "Fermion"
+    },
+    {
+        "difficulty": "medium",
+        "question": "What is not true about Fermi-Dirac Statistics?",
+        "options": [
+            "Applies to identical and indistinguishable particles with half-integer spin (1/2, 3/2, etc.)",
+            "It can be applied to bosons.",
+            "Uses the principles of quantum mechanics.",
+            "Is most commonly applied to electrons."
+        ],
+        "correctAnswer": "It can be applied to bosons."
+    },
+    {
+        "difficulty": "easy",
+        "question": "Which element has the atomic number of 77?",
+        "options": [
+            "Neon",
+            "Terbium",
+            "Iodine",
+            "Iridium"
+        ],
+        "correctAnswer": "Iridium"
+    },
+    {
+        "difficulty": "easy",
+        "question": "What is the geocorona?",
+        "options": [
+            "In the ancient greek mithology, the crown Zeus had to wear in fest days.",
+            "The most common metals in planet Earth.",
+            "The part of the Earth's atmosphere recieving most sun radiation.",
+            "The luminous part of the outermost region of the Earth's atmosphere,"
+        ],
+        "correctAnswer": "The luminous part of the outermost region of the Earth's atmosphere,"
+    },
+    {
+        "difficulty": "hard",
+        "question": "Which atomic isotope does not produce Beta-Decay (β- electron and an antineutrino) eventually?",
+        "options": [
+            "32P",
+            "174Lu",
+            "176Lu",
+            "250Cm"
+        ],
+        "correctAnswer": "174Lu"
+    },
+    {
+        "difficulty": "medium",
+        "question": "Boiling point of the Bromine.",
+        "options": [
+            "766 °K",
+            "398° K",
+            "574° K",
+            "332° K"
+        ],
+        "correctAnswer": "332° K"
+    },
+    {
+        "difficulty": "medium",
+        "question": "Which element was synthesized last?",
+        "options": [
+            "Oganesson",
+            "Darmstadtium",
+            "Livermorium",
+            "Moscovium"
+        ],
+        "correctAnswer": "Livermorium"
+    },
+ {
+        "difficulty": "hard",
+        "question": "Which is the critical point of the Krypton?",
+        "options": [
+            "116.8 °K",
+            "189.5 °K",
+            "209.5 °K",
+            "221.5 °K"
+        ],
+        "correctAnswer": "209.5 °K"
+    }
+]
