@@ -57,6 +57,8 @@
 
     /* Periodic map */
     .ptable{ display:grid; grid-template-columns: repeat(18, minmax(20px, 1fr)); gap: var(--grid-gap); align-content:start }
+    /*Element view*/
+    .elements{position:relative; min-height: var(--cell); border-radius:18px; background:#bbd9e9; border:3px solid rgba(48, 45, 68, 0.374); cursor:pointer}
     .cell{ position:relative; min-height: var(--cell); border-radius:10px; background:#fff; border:1px solid rgba(2,6,23,.08); cursor:pointer; box-shadow: inset 0 1px 0 rgba(2,6,23,.04) }
     .cell .sym{ position:absolute; left:.35rem; top:.25rem; font-weight:700 }
     .cell .num{ position:absolute; right:.35rem; top:.25rem; font-size:11px; color:var(--muted) }
@@ -113,7 +115,9 @@
     <section class="pane workspace" id="workspace">
       <div class="tabs" role="tablist" aria-label="View switcher">
         <button class="tab" role="tab" aria-selected="true" id="tab-map">Periodic Map</button>
-        <button class="tab" role="tab" aria-selected="false" id="tab-chart">Pie Chart</button>
+        <button class="tab" role="tab" aria-selected="false" id="tab-chart">Periodic table elements by Class</button>
+        <button class="tab" role="tab" aria-selected="false" id="tab-particles">Particles</button>
+        <button class="tab" role="tab" aria-selected="false" id="tab-charts">Charts - Periodic Table elements</button>
       </div>
       <div class="workspace-body">
         <!-- Periodic table view -->
@@ -129,6 +133,28 @@
             </div>
           </div>
         </div>
+        <!--Elements view-->
+         <div id="view-particles" role="tabpanel" aria-labelledby="tab-particles">
+          <div class="elements" id="elsview" aria-label="Elements view"></div>
+        </div>
+        <div id="view-map" role="tabpanel" aria-labelledby="tab-map">
+          <div class="ptable" id="ptable" aria-label="Periodic table grid"></div>
+        </div>
+        <div id="view-charts" role="tabpanel" aria-labelledby="tab-charts">
+          <div class="charts-wrap">
+            <div class="tabs" role="tablist" aria-label="View switcher">
+              <button class="tab" role="tab" aria-selected="false" id="boilBtn">Boil Point</button>
+              <button class="tab" role="tab" aria-selected="false" id="meltBtn">Melt Point</button>
+              <button class="tab" role="tab" aria-selected="false" id="densityBtn">Density</button>
+              <button class="tab" role="tab" aria-selected="false" id="soundBtn">Speed of sound</button>
+            </div>
+            <div class="charts-card">
+              <h3 style="margin:.3rem 0 .6rem", id="chart-kind">Boil point (°K)</h3>
+              <canvas id="charts"></canvas>
+            </div>
+          </div>
+       </div>
+
       </div>
     </section>
 
@@ -177,11 +203,18 @@
     const ptable = $("ptable");
     const viewMap = $("view-map"), viewChart=$("view-chart");
     const tabMap = $("tab-map"), tabChart=$("tab-chart");
+    const elsView = $("view-particles"), elmsView=$("tab-particles");
+    const chartsMap= $("view-charts"), chartsView=$("tab-charts");
+    const boilBtn= $("boilBtn"), meltBtn=$("meltBtn");
+    const densityBtn= $("densityBtn"), soundBtn=$("soundBtn");
+
     const glossSearch = $("glossarySearch"), glossList=$("glossaryList");
 
     let ELEMENTS = [];
+    let PARTICLES = [];
     let TERMS = [];
     let pieChart;
+    let boilChart;
 
     function catClass(cat){
       if(!cat) return '';
@@ -228,6 +261,73 @@
         options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
       });
     }
+    function buildCharts(element) {
+
+    const ctx = document.getElementById('charts');
+
+    const labels = [];
+    const data = [];
+
+    ELEMENTS.forEach((e, i) => {
+
+        let x =
+            element == 0 ? e.boil :
+            element == 1 ? e.melt :
+            element == 2 ? e.density :
+            element == 3 ? e.speed_of_sound :
+            e.boil;
+
+        if (x == null || x === '') {
+            return;
+        }
+
+        x = String(x).replace(/[^0-9.]/g, '');
+
+        if (x === '') {
+            return;
+        }
+
+        labels.push("Element " + e.number);
+        data.push(Number(x));
+    });
+
+    if (boilChart) {
+        boilChart.destroy();
+    }
+
+    boilChart = new Chart(ctx, {
+        type: 'line',
+
+        data: {
+            labels: labels,
+
+            datasets: [{
+                label: 'Melt Point (°K)',
+                data: data,
+                borderColor: 'rgba(191, 198, 114, 0.81)',
+                tension: 0.3
+            }]
+        },
+
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Element'
+                    }
+                },
+
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Temperature (°K)'
+                    }
+                }
+            }
+        }
+    });
+}
 
     function filterGlossary(){
       const q = glossSearch.value.trim().toLowerCase();
@@ -244,18 +344,51 @@
           glossList.appendChild(card);
         });
     }
+    function buildElementView(q=''){
+      elmsView.innerHTML='';
+      PARTICLES.forEach(e => {
+       const card = document.createElement('div');
+          card.className = 'term';
+          card.innerHTML = `<div class="t">${t.name}</div><div class="u">${t.mass||''}
+            </div><div class="d">${t.electric_charge||''}</div><div class="u">${t.color_charge||''}
+            </div><div class="u">${t.spin||''}
+            </div><div class="u">${t.antiparticle||''}
+            </div><div class="u">${t.generation||''}
+            </div><div class="u">${t.interactions||''}
+            </div><div class="u">${t.degradation||''}
+            </div>`;
+          elmsView.appendChild(card);
+      });
+    }
 
     function switchTo(view){
       const showChart = (view === 'chart');
+      const showTable = (view === 'map');
+      const showParticles = (view === 'particles');
+
+      const showCharts = (view === 'charts');
+
       viewChart.hidden = !showChart;
       viewMap.hidden = showChart;
       tabChart.setAttribute('aria-selected', showChart);
-      tabMap.setAttribute('aria-selected', !showChart);
+      elsView.setAttribute('aria-selected', showTable);
+      tabMap.setAttribute('aria-selected', showParticles);
+      chartsMap.setAttribute('aria-selected', showCharts);
+
       if(showChart) buildPie();
+      if(showTable)buildElementView();
+      if(showCharts) buildCharts(0);
     }
 
     tabMap.addEventListener('click', () => switchTo('map'));
+    elsView.addEventListener('click', () => switchTo('particles'));
     tabChart.addEventListener('click', () => switchTo('chart'));
+    chartsView.addEventListener('click', () => switchTo('charts'));
+    boilBtn.addEventListener('click', () => {switchTo('charts');buildCharts(0);});
+    meltBtn.addEventListener('click', () => {switchTo('charts');buildCharts(1);});
+    densityBtn.addEventListener('click', () => {switchTo('charts');buildCharts(2);});
+    soundBtn.addEventListener('click', () => {switchTo('charts');buildCharts(3);});
+
     glossSearch.addEventListener('input', filterGlossary);
 
     async function loadJSON(url, fallbackId){
@@ -272,10 +405,13 @@
     (async function init(){
       const elData = await loadJSON('files/elements.json', 'elements-fallback');
       const glData = await loadJSON('files/glossary.json', 'glossary-fallback');
+      const ptData = await loadJSON('files/particles.json', 'particles-fallback');
       ELEMENTS = elData.elements || elData || [];
       TERMS = glData.terms || glData || [];
+      PARTICLES = ptData.terms || ptData || [];
       buildTable();
       renderGlossary();
+      //buildElementView();
       // Preselect Hydrogen if present
       const H = ELEMENTS.find(e => e.symbol === 'H') || ELEMENTS[0];
       if(H) selectElement(H);
