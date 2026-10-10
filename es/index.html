@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AllParticles — Explorer</title>
+  <title>AllParticles — Explorador</title>
   <link rel="icon" type="image/png" href="files/imgs/atom.png" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -16,9 +16,9 @@
       --card-hover: rgba(255,255,255,.12);
       --line: rgba(255,255,255,.11);
       --text: #eef6ff;
-      --muted: #c69fc7;
-      --accent: #ffbe73;
-      --accent-2: #f2f3a7;
+      --muted: #9fb1c7;
+      --accent: #ff7373;
+      --accent-2: #f3eea7;
       --shadow: 0 24px 70px rgba(0,0,0,.38);
       --radius: 20px;
       --cell: 58px;
@@ -32,7 +32,8 @@
     body {
       margin: 0;
       color: var(--text);
-      font-family: 'Times New Roman', Times, serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Roboto, Arial, sans-serif;
       background:
         radial-gradient(circle at 15% 10%, rgba(74, 177, 255, .18), transparent 30%),
         radial-gradient(circle at 85% 85%, rgba(99, 230, 190, .12), transparent 30%),
@@ -304,9 +305,9 @@
       white-space: nowrap;
     }
 
-    .cat-metal { background: linear-gradient(145deg, rgba(67,122,180,.27), rgba(255,255,255,.055)); }
-    .cat-nonmetal { background: linear-gradient(145deg, rgba(48,174,123,.23), rgba(255,255,255,.055)); }
-    .cat-metalloid { background: linear-gradient(145deg, rgba(220,151,67,.26), rgba(255,255,255,.055)); }
+    .cat-metal { background: linear-gradient(145deg, rgba(163, 180, 67, 0.27), rgba(255,255,255,.055)); }
+    .cat-nonmetal { background: linear-gradient(145deg, rgba(48, 92, 174, 0.23), rgba(255,255,255,.055)); }
+    .cat-metalloid { background: linear-gradient(145deg, rgba(220, 67, 67, 0.26), rgba(255,255,255,.055)); }
 
     /* ---------- Charts ---------- */
 
@@ -486,14 +487,14 @@
 
     * {
       scrollbar-width: thin;
-      scrollbar-color: rgba(115,214,255,.35) transparent;
+      scrollbar-color: rgba(225, 255, 115, 0.35) transparent;
     }
 
     *::-webkit-scrollbar { width: 7px; height: 7px; }
     *::-webkit-scrollbar-track { background: transparent; }
     *::-webkit-scrollbar-thumb {
       border-radius: 99px;
-      background: rgba(115,214,255,.3);
+      background: rgba(194, 255, 115, 0.3);
     }
 
     /* ---------- Responsive ---------- */
@@ -537,8 +538,8 @@
     <section class="pane info" id="info">
       <div class="info-top">
         <div>
-          <p class="eyebrow">AllParticles Explorer</p>
-          <h1 id="elTitle">Pick an element</h1>
+          <p class="eyebrow">Explorador del microcosmos</p>
+          <h1 id="elTitle">Elige un elemento</h1>
         </div>
 
         <div class="meta">
@@ -549,19 +550,19 @@
 
       <div class="quick-stats" aria-live="polite">
         <div class="stat">
-          <div class="k">Atomic #</div>
+          <div class="k"># atómico</div>
           <div class="v" id="elZ">—</div>
         </div>
         <div class="stat">
-          <div class="k">Symbol</div>
+          <div class="k">Símbolo</div>
           <div class="v" id="elSym">—</div>
         </div>
         <div class="stat">
-          <div class="k">Atomic mass</div>
+          <div class="k">Masa atómica</div>
           <div class="v" id="elMass">—</div>
         </div>
         <div class="stat">
-          <div class="k">Boiling point</div>
+          <div class="k">Punto de ebullición</div>
           <div class="v" id="elBoil">—</div>
         </div>
       </div>
@@ -581,12 +582,12 @@
         <div id="view-map" class="view" role="tabpanel" aria-labelledby="tab-map">
           <div class="table-intro">
             <div>
-              <h2>Periodic table</h2>
-              <p>Press a element to inspect its basic properties.</p>
+              <h2>Tabla periódica</h2>
+              <p>Haz clic en un elemento para inspeccionar sus propiedades básicas.</p>
             </div>
           </div>
           <div class="ptable-scroll">
-            <div class="ptable" id="ptable" aria-label="Grid of the periodic table"></div>
+            <div class="ptable" id="ptable" aria-label="Grid de la tabla periódica"></div>
           </div>
         </div>
 
@@ -594,8 +595,8 @@
           <div class="chart-wrap">
             <div class="chart-card">
               <div class="view-heading">
-                <h2>Elements by class</h2>
-                <p>Distribution of elements by category.</p>
+                <h2>Elementos por clase</h2>
+                <p>Distribución de los elementos cargados por categoría.</p>
               </div>
               <canvas id="pie"></canvas>
             </div>
@@ -604,7 +605,7 @@
 
         <div id="view-particles" class="view" role="tabpanel" aria-labelledby="tab-particles" hidden>
           <div class="view-heading">
-            <h2>Particles</h2>
+            <h2>Partículas</h2>
             <p>Information about particles loaded from <code>particles.json</code>.</p>
           </div>
           <div class="elements" id="elsview" aria-label="Particles view"></div>
@@ -613,19 +614,19 @@
         <div id="view-charts" class="view" role="tabpanel" aria-labelledby="tab-charts" hidden>
           <div class="charts-wrap">
             <nav class="tabs charts-tabs" role="tablist" aria-label="Property chart">
-              <button class="tab" aria-selected="true" id="boilBtn">Boiling Point</button>
-              <button class="tab" aria-selected="false" id="meltBtn">Melting Point</button>
-              <button class="tab" aria-selected="false" id="densityBtn">Density</button>
-              <button class="tab" aria-selected="false" id="soundBtn">Speed of Sound</button>
-              <button class="tab" aria-selected="false" id="fussionBtn">Heat of Fusion</button>
-              <button class="tab" aria-selected="false" id="vaporizationBtn">Heat of Vaporization</button>
-              <button class="tab" aria-selected="false" id="poissonBtn">Poisson Ratio</button>
+              <button class="tab" aria-selected="true" id="boilBtn">Punto de ebullición</button>
+              <button class="tab" aria-selected="false" id="meltBtn">Punto de fusión</button>
+              <button class="tab" aria-selected="false" id="densityBtn">Densidad</button>
+              <button class="tab" aria-selected="false" id="soundBtn">Velocidad del sonido</button>
+              <button class="tab" aria-selected="false" id="fussionBtn">Calor de fusión</button>
+              <button class="tab" aria-selected="false" id="vaporizationBtn">Calor de vaporización</button>
+              <button class="tab" aria-selected="false" id="poissonBtn">Ratio de Poisson</button>
             </nav>
 
             <div class="charts-card">
               <div class="view-heading">
-                <h2 id="chart-kind">Boiling Point (K)</h2>
-                <p id="chart-description">Boiling point of each element.</p>
+                <h2 id="chart-kind">Punto de ebullición (°K)</h2>
+                <p id="chart-description">Punto de ebullición de cada elemento.</p>
               </div>
               <canvas id="charts"></canvas>
             </div>
@@ -639,19 +640,18 @@
     <aside class="pane glossary" id="glossary">
       <header>
         <div class="glossary-title">
-          <h2>Terms and units</h2>
+          <h2>Términos y Unidades</h2>
           <span class="glossary-count" id="glossaryCount"></span>
         </div>
         <input id="glossarySearch" type="search" placeholder="Search terms or units…" aria-label="Search glossary" />
       </header>
       <div class="list" id="glossaryList" aria-live="polite"></div>
     </aside>
-    <a id="spanishBtn" href="es/index.html" style="background-color: #ffbe73; color: #333; width: 10%;">Español</a>
+
   </main>
 
   <!-- Fallback element data -->
   <script type="application/json" id="elements-fallback">
-    
   {
     "elements": [
       {"number":1, "symbol":"H",  "name":"Hydrogen",  "category":"nonmetal",  "xpos":1, "ypos":1, "phase":"gas", "atomic_mass":1.008, "boil":20.28},
@@ -685,8 +685,6 @@
   </script>
 
   <script>
-    
-  
     const $ = id => document.getElementById(id);
 
     const elTitle = $("elTitle");
@@ -727,17 +725,23 @@
     };
 
     const chartTitles = [
-      "Boil point (°K)",
-      "Melt point (°K)",
-      "Density",
-      "Speed of sound (m/s)"
+      "Punto de ebullición (°K)",
+      "Punto de fusión (°K)",
+      "Densidad",
+      "Velocidad del sonido (m/s)",
+      "Ratio de veneno",
+      "Calor de fusión (kJ/mol)",
+      "Calor de vaporización (kJ/mol)"
     ];
 
     const chartDescriptions = [
-      "Boiling point of each element in the loaded dataset.",
-      "Melting point of each element in the loaded dataset.",
-      "Density values for each element in the loaded dataset.",
-      "Speed of sound values for each element in the loaded dataset."
+      "Punto de ebullición de cada elemento.",
+      "Punto de fusión de cada elemento.",
+      "Valores de densidad para cada elemento.",
+      "Valores de velocidad del sonido para cada elemento.",
+      "Valores de veneno para cada elemento",
+      "Valores de calor de fusión para cada elemento.",
+      "Valores de calor de vaporización para cada elemento."
     ];
 
     let ELEMENTS = [];
@@ -775,7 +779,7 @@
         cell.style.gridColumn = e.xpos;
         cell.style.gridRow = e.ypos;
         cell.title = `${e.name || ""} (${e.symbol || ""})`;
-        cell.setAttribute("aria-label", `${e.name || "Element"} (${e.symbol || ""})`);
+        cell.setAttribute("aria-label", `${e.name || "Elemento"} (${e.symbol || ""})`);
 
         cell.innerHTML = `
           <div class="num">${e.number ?? ""}</div>
@@ -1039,9 +1043,9 @@
     });
 
     (async function init() {
-      const elData = await loadJSON("files/elements.json", "elements-fallback");
-      const glData = await loadJSON("files/glossary.json", "glossary-fallback");
-      const ptData = await loadJSON("files/particles.json", "particles-fallback");
+      const elData = await loadJSON("../files/elements.json", "elements-fallback");
+      const glData = await loadJSON("../files/es_glossary.json", "glossary-fallback");
+      const ptData = await loadJSON("../files/particles.json", "particles-fallback");
 
       ELEMENTS = elData.elements || elData || [];
       TERMS = glData.terms || glData || [];
@@ -1053,8 +1057,7 @@
       const H = ELEMENTS.find(e => e.symbol === "H") || ELEMENTS[0];
       if (H) selectElement(H);
 
-      switchTo("map"); 
-     
+      switchTo("map");
     })();
   </script>
 </body>
