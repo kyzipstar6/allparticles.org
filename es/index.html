@@ -621,6 +621,11 @@
               <button class="tab" aria-selected="false" id="fussionBtn">Calor de fusión</button>
               <button class="tab" aria-selected="false" id="vaporizationBtn">Calor de vaporización</button>
               <button class="tab" aria-selected="false" id="poissonBtn">Ratio de Poisson</button>
+              <button class="tab" aria-selected="false" id="triplePointTemperatureBtn">Temperatura del punto triple (K)</button>
+              <button class="tab" aria-selected="false" id="triplePointPressureBtn">Presión del punto triple (kPa)</button>
+              <button class="tab" aria-selected="false" id="criticalPointTemperatureBtn">Temperatura del punto crítico (K)</button>
+              <button class="tab" aria-selected="false" id="criticalPointPressureBtn">Presión del punto crítico (kPa)</button>
+              <button class="tab" aria-selected="false" id="mohsHardnessBtn">Dureza de Mohs</button>
             </nav>
 
             <div class="charts-card">
@@ -720,8 +725,13 @@
       2: $("densityBtn"),
       3: $("soundBtn"),
       4: $("poissonBtn"),
-      5: $("fussionBtn"),
-      6: $("vaporizationBtn")
+      5: $("fusionBtn"),
+      6: $("vaporizationBtn"),
+      7: $("triplePointTemperatureBtn"),
+      8: $("triplePointPressureBtn"),
+      9: $("criticalPointTemperatureBtn"),
+      10: $("criticalPointPressureBtn"),
+      11: $("mohsHardnessBtn")
     };
 
     const chartTitles = [
@@ -731,7 +741,12 @@
       "Velocidad del sonido (m/s)",
       "Ratio de veneno",
       "Calor de fusión (kJ/mol)",
-      "Calor de vaporización (kJ/mol)"
+      "Calor de vaporización (kJ/mol)",
+      "Temperatura del punto triple (°K)",
+      "Presión del punto triple (Pa)",
+      "Temperatura del punto crítico (°K)",
+      "Presión del punto crítico (Pa)",
+      "Dureza de Mohs"
     ];
 
     const chartDescriptions = [
@@ -741,7 +756,12 @@
       "Valores de velocidad del sonido para cada elemento.",
       "Valores de veneno para cada elemento",
       "Valores de calor de fusión para cada elemento.",
-      "Valores de calor de vaporización para cada elemento."
+      "Valores de calor de vaporización para cada elemento.",
+      "Valores de temperatura del punto triple para cada elemento.",
+      "Valores de presión del punto triple para cada elemento.",
+      "Valores de temperatura del punto crítico para cada elemento.",
+      "Valores de presión del punto crítico para cada elemento.",
+      "Valores de dureza de Mohs para cada elemento."
     ];
 
     let ELEMENTS = [];
@@ -840,11 +860,14 @@
         property === 1 ? e.melt :
         property === 2 ? e.density :
         property === 3 ? e.speed_of_sound :
-        property === 4 ? e.poissson_ratio :
-        property === 5 ? e.heat_of_fussion :
+        property === 4 ? e.poisson_ratio :
+        property === 5 ? e.heat_of_fusion :
         property === 6 ? e.heat_of_vaporization :
-
-
+        property === 7 ? e.triple_point_temperature :
+        property === 8 ? e.triple_point_pressure :
+        property === 9 ? e.critical_point_temperature :
+        property === 10 ? e.critical_point_pressure :
+        property === 11 ? e.mohs_hardness :
         e.boil;
 
       if (value == null || value === "") return null;
