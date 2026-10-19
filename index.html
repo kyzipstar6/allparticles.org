@@ -534,6 +534,8 @@
   <main class="app" role="application" aria-label="AllParticles explorer">
 
     <!-- Selected element -->
+    <a id="spanishBtn" href="es/index.html" style="background-color: #ffbe73; color: #333; width: 10%;">Español</a>
+
     <section class="pane info" id="info">
       <div class="info-top">
         <div>
@@ -617,9 +619,14 @@
               <button class="tab" aria-selected="false" id="meltBtn">Melting Point</button>
               <button class="tab" aria-selected="false" id="densityBtn">Density</button>
               <button class="tab" aria-selected="false" id="soundBtn">Speed of Sound</button>
-              <button class="tab" aria-selected="false" id="fussionBtn">Heat of Fusion</button>
+              <button class="tab" aria-selected="false" id="fusionBtn">Heat of Fusion</button>
               <button class="tab" aria-selected="false" id="vaporizationBtn">Heat of Vaporization</button>
               <button class="tab" aria-selected="false" id="poissonBtn">Poisson Ratio</button>
+              <button class="tab" aria-selected="false" id="triplePointTemperatureBtn">Triple Point Temperature</button>
+              <button class="tab" aria-selected="false" id="triplePointPressureBtn">Triple Point Pressure</button>
+              <button class="tab" aria-selected="false" id="criticalPointTemperatureBtn">Critical Point Temperature</button>
+              <button class="tab" aria-selected="false" id="criticalPointPressureBtn">Critical Point Pressure</button>
+              <button class="tab" aria-selected="false" id="mohsHardnessBtn">Mohs Hardness</button>
             </nav>
 
             <div class="charts-card">
@@ -646,7 +653,6 @@
       </header>
       <div class="list" id="glossaryList" aria-live="polite"></div>
     </aside>
-    <a id="spanishBtn" href="es/index.html" style="background-color: #ffbe73; color: #333; width: 10%;">Español</a>
   </main>
 
   <!-- Fallback element data -->
@@ -722,22 +728,43 @@
       2: $("densityBtn"),
       3: $("soundBtn"),
       4: $("poissonBtn"),
-      5: $("fussionBtn"),
-      6: $("vaporizationBtn")
+      5: $("fusionBtn"),
+      6: $("vaporizationBtn"),
+      7: $("triplePointTemperatureBtn"),
+      8: $("triplePointPressureBtn"),
+      9: $("criticalPointTemperatureBtn"),
+      10: $("criticalPointPressureBtn"),
+      11: $("mohsHardnessBtn")
     };
 
     const chartTitles = [
       "Boil point (°K)",
       "Melt point (°K)",
-      "Density",
-      "Speed of sound (m/s)"
+      "Density (293 K, g/cm³)",
+      "Speed of sound (m/s)",
+      "Poisson ratio",
+      "Heat of Fusion (kJ/mol)",
+      "Heat of Vaporization (kJ/mol)",
+      "Triple Point Temperature (°K)",
+      "Triple Point Pressure (kPa)",
+      "Critical Point Temperature (°K)",
+      "Critical Point Pressure (kPa)",
+      "Mohs hardness",
     ];
 
     const chartDescriptions = [
       "Boiling point of each element in the loaded dataset.",
       "Melting point of each element in the loaded dataset.",
       "Density values for each element in the loaded dataset.",
-      "Speed of sound values for each element in the loaded dataset."
+      "Speed of sound values for each element in the loaded dataset.",
+      "Poisson ratio values for each element in the loaded dataset.",
+      "Heat of fusion values for each element in the loaded dataset.",
+      "Heat of vaporization values for each element in the loaded dataset.",
+      "Triple point temperature values for each element in the loaded dataset.",
+      "Triple point pressure values for each element in the loaded dataset.",
+      "Critical point temperature values for each element in the loaded dataset.",
+      "Critical point pressure values for each element in the loaded dataset.",
+      "Mohs hardness values for each element in the loaded dataset."
     ];
 
     let ELEMENTS = [];
@@ -836,10 +863,14 @@
         property === 1 ? e.melt :
         property === 2 ? e.density :
         property === 3 ? e.speed_of_sound :
-        property === 4 ? e.poissson_ratio :
-        property === 5 ? e.heat_of_fussion :
+        property === 4 ? e.poisson_ratio :
+        property === 5 ? e.heat_of_fusion :
         property === 6 ? e.heat_of_vaporization :
-
+        property === 7 ? e.triple_point_temperature :
+        property === 8 ? e.triple_point_pressure :
+        property === 9 ? e.critical_point_temperature :
+        property === 10 ? e.critical_point_pressure :
+        property === 11 ? e.mohs_hardness :
 
         e.boil;
 
@@ -861,7 +892,7 @@
 
       ELEMENTS.forEach(e => {
         const value = getNumericValue(e, property);
-        if (value == null) return;
+        //if (value == null) return;
 
         labels.push(`Element ${e.number}`);
         data.push(value);
